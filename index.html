@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>eDominations Dashboard</title>
+<link rel="stylesheet" href="style.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
+<script src="script.js" defer></script>
+</head>
+<body>
+
+<header>
+    <img id="logo" src="https://edominations.com/public/img/logo2.webp" alt="Logo">
+    <h1>eDominations Dashboard</h1>
+    <input type="text" id="searchInput" placeholder="Search by Name or ID">
+    <button id="searchBtn">Search</button>
+</header>
+
+<!-- DROPDOWN FILTER -->
+<div id="filterContainer" style="margin: 15px 0;">
+    <label for="countryFilter">Filter by country :</label>
+    <select id="countryFilter">
+        <option value="Global">Global</option>
+    </select>
+</div>
+
+<!-- HOME PAGE -->
+<div id="homeContainer">
+    <div id="levelCard" class="card-container">
+        <h2>Level Top10</h2>
+        <div class="card-list"></div>
+    </div>
+    <div id="xpCard" class="card-container">
+        <h2>XP Top10</h2>
+        <div class="card-list"></div>
+    </div>
+    <div id="strengthCard" class="card-container">
+        <h2>Strength Top10</h2>
+        <div class="card-list"></div>
+    </div>
+    <div id="rankCard" class="card-container">
+        <h2>Rank Top10</h2>
+        <div class="card-list"></div>
+    </div>
+    <div id="totaldmgCard" class="card-container">
+        <h2>TotalDMG Top10</h2>
+        <div class="card-list"></div>
+    </div>
+    <div id="TruePatriotDmgCard" class="card-container">
+        <h2>TruePatriotDmg Top10</h2>
+        <div class="card-list"></div>
+    </div>
+    <div id="TrueAllyDmgCard" class="card-container">
+        <h2>TrueAllyDmg Top10</h2>
+        <div class="card-list"></div>
+    </div>
+    <div id="TrueRevolutionaryDmgCard" class="card-container">
+        <h2>TrueRevolutionaryDmg Top10</h2>
+        <div class="card-list"></div>
+    </div>
+</div>
+
+<!-- CITIZEN VIEW -->
+<div id="citizenContainer" style="display:none;">
+    <div id="citizenCard" class="card"></div>
+    <div id="chartsContainer"></div>
+</div>
+
+<script>
+    // Popuni dropdown sa državama iz JSON-a nakon fetch-a
+    fetch('All_Data.json')
+    .then(res => res.json())
+    .then(data => {
+        allData = data;
+
+        const countrySelect = document.getElementById("countryFilter");
+        const uniqueCountries = [...new Set(allData.map(d => d.CS))].sort();
+        uniqueCountries.forEach(c => {
+            const opt = document.createElement("option");
+            opt.value = c;
+            opt.textContent = c;
+            countrySelect.appendChild(opt);
+        });
+
+        // Kad se promeni država, renderuje se ponovo home page
+        countrySelect.addEventListener("change", renderHomePage);
+
+        // Prvi prikaz
+        renderHomePage();
+    });
+</script>
+
+</body>
+</html>
